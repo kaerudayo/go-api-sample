@@ -13,7 +13,7 @@ services:
     volumes:
       - ./app:/go/app
     ports:
-      - "5002:5000"
+      - "9001:9000"
     networks:
       - api-network
     env_file:
