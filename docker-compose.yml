@@ -1,0 +1,70 @@
+version: "3.5"
+services:
+  # API Container
+  api:
+    container_name: api-server
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    depends_on:
+      db:
+          condition: service_healthy
+    restart: "no"
+    volumes:
+      - ./app:/go/app
+    ports:
+      - "5002:5000"
+    networks:
+      - api
+    env_file:
+      - .env
+    command: sh -c "air -c .air.conf"
+
+  # KVS
+  redis:
+    container_name: api-redis
+    build: ./redis
+    restart: "no"
+    volumes:
+      - "./redis/data:/data"
+    ports:
+      - "6002:6379"
+    networks:
+      - api
+
+  # Database container
+  db:
+    container_name: api-db
+    platform: linux/x86_64
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: "no"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ".mysql:/var/lib/mysql"
+    ports:
+      - 3308:3306
+    networks:
+      - api
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # mail server for local
+  mail:
+    image: mailhog/mailhog
+    container_name: api-mailhog
+    ports:
+      - "1027:1025"
+      - "8027:8025"
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
+    networks:
+      - api
+
+networks:
+  api:
+    driver: bridge
