@@ -12,5 +12,15 @@ up/detach: setup
 stop:
 	docker-compose stop
 
+.PHONY: shell/*
+shell/api:
+	docker exec -it api-server /bin/bash
+
+shell/redis:
+	docker exec -it api-redis /bin/bash -c "redis-cli"
+
+shell/mysql:
+	docker exec -it api-db /bin/sh -c "mysql -uroot -proot"
+
 logs/api:
 	docker-compose logs -f api-server

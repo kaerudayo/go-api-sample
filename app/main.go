@@ -7,6 +7,5 @@ import (
 
 func main() {
 	e := router.NewRouter()
-
 	e.Logger.Fatal(e.Start(":" + consts.APIPort))
 }
