@@ -1,4 +1,4 @@
-package handler
+package user
 
 import (
 	"net/http"
@@ -10,6 +10,6 @@ func Top(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Hello, World!")
 }
 
-func Login(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+func SignUp(c echo.Context) error {
+	return c.JSON(http.StatusOK, "TODO")
 }
