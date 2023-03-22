@@ -3,7 +3,7 @@ package entity
 import (
 	"database/sql"
 
-	"github.com/api-sample/app/pkg/model"
+	"github.com/api-sample/app/domain/model"
 )
 
 type User struct {

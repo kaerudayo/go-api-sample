@@ -10,6 +10,7 @@ func NewRouter() *echo.Echo {
 	e := echo.New()
 	e.Use(logger.LoggerMiddleware())
 	e.Use(middleware.Recover())
+
 	NewUserRoute(e)
 	return e
 }
