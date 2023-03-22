@@ -1,13 +1,15 @@
 package router
 
 import (
-	"github.com/api-sample/app/pkg/handler"
+	"github.com/api-sample/app/pkg/logger"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func NewRouter() *echo.Echo {
 	e := echo.New()
-	v1 := e.Group("/v1")
-	v1.GET("/", handler.Login)
+	e.Use(logger.LoggerMiddleware())
+	e.Use(middleware.Recover())
+	NewUserRoute(e)
 	return e
 }
