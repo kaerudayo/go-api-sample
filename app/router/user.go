@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/api-sample/app/pkg/handler"
+	"github.com/api-sample/app/cmd/handler"
 	"github.com/labstack/echo/v4"
 )
 
