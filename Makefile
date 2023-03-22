@@ -12,6 +12,12 @@ up/detach: setup
 stop:
 	docker-compose stop
 
+.PHONY: db/*
+db/reset: db/drop db/create db/migrate db/seed
+
+db/drop db/create db/migrate db/seed:
+	docker exec -it api-server /bin/sh -c "go run scripts/db/db.go ${@F}"
+
 .PHONY: shell/*
 shell/api:
 	docker exec -it api-server /bin/bash

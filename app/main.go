@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/api-sample/app/consts"
+	"github.com/api-sample/app/pkg/consts"
+	"github.com/api-sample/app/pkg/db"
 	"github.com/api-sample/app/pkg/logger"
 	"github.com/api-sample/app/router"
 )
@@ -15,5 +16,6 @@ func main() {
 		}
 	}()
 	e := router.NewRouter()
+	db.Init(true)
 	e.Logger.Fatal(e.Start(":" + consts.APIPort))
 }
