@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/api-sample/app/cmd/router"
+	"github.com/api-sample/app/infra"
 	"github.com/api-sample/app/pkg/consts"
-	"github.com/api-sample/app/pkg/db"
 	"github.com/api-sample/app/pkg/logger"
-	"github.com/api-sample/app/router"
 )
 
 func main() {
@@ -15,7 +15,10 @@ func main() {
 			panic(err)
 		}
 	}()
+	// routerの初期化
 	e := router.NewRouter()
-	db.Init(true)
+	// dbの初期化
+	infra.Init(true)
+	// serverの起動
 	e.Logger.Fatal(e.Start(":" + consts.APIPort))
 }
