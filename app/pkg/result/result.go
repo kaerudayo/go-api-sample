@@ -14,6 +14,20 @@ func NewResponce(code int, msg string) Response {
 	}
 }
 
+func NewBadRequest(msg string) Response {
+	return Response{
+		Code: http.StatusBadRequest,
+		Msg:  msg,
+	}
+}
+
+func NewInternalServerError(msg string) Response {
+	return Response{
+		Code: http.StatusInternalServerError,
+		Msg:  msg,
+	}
+}
+
 func Success(msg string) Response {
 	return Response{
 		Code: http.StatusOK,
