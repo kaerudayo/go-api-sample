@@ -9,5 +9,5 @@ func NewUserRoute(e *echo.Echo) {
 	v1 := e.Group("/v1")
 	v1.GET("", user.Top)
 	v1.GET("/signup", user.SignUp)
-	v1.GET("/users/:id", user.FindById)
+	v1.GET("/users/:id", user.FindByID)
 }

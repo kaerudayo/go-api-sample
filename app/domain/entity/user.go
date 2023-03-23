@@ -16,7 +16,7 @@ type User struct {
 	UpdatedAt sql.NullTime
 }
 
-func (e User) toModel() model.User {
+func (e User) Model() model.User {
 	return model.User{
 		ID:        e.ID,
 		Name:      e.Name,

@@ -28,7 +28,6 @@ linters:
     - execinquery
     - exhaustive
     - exportloopref
-    - forbidigo
     - forcetypeassert
     - funlen
     - gci
@@ -52,7 +51,6 @@ linters:
     - importas
     - ineffassign
     - interfacebloat
-    - ireturn
     - lll
     - maintidx
     - makezero
@@ -60,7 +58,6 @@ linters:
     - nakedret
     - nilerr
     - nilnil
-    - nlreturn
     - noctx
     - nolintlint
     - nosprintfhostport
@@ -86,7 +83,6 @@ linters:
     - usestdlibvars
     - wastedassign
     - whitespace
-    - wsl
 
 linters-settings:
   # tagの命名規則

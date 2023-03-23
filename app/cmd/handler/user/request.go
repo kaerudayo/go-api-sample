@@ -14,12 +14,12 @@ func (r signUpReq) toInput() user.SignUpInput {
 	}
 }
 
-type findByIdReq struct {
+type findByIDReq struct {
 	ID string
 }
 
-func (r findByIdReq) toInput() user.FindByIdInput {
-	return user.FindByIdInput{
+func (r findByIDReq) toInput() user.FindByIDInput {
+	return user.FindByIDInput{
 		ID: r.ID,
 	}
 }
