@@ -15,7 +15,7 @@ func NewUserQueryImpl(db *gorm.DB) query.UserQuery {
 	return &userRepo
 }
 
-func (impl UserQueryImpl) FindById(id string) model.User {
+func (impl UserQueryImpl) FindByID(id string) model.User {
 	var user model.User
 	impl.db.Where("id = ?", id).Find(&user)
 	return user

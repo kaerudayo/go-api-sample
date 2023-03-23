@@ -5,6 +5,6 @@ type SignUpInput struct {
 	Password string
 }
 
-type FindByIdInput struct {
+type FindByIDInput struct {
 	ID string
 }

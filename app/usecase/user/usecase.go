@@ -12,13 +12,13 @@ type q struct {
 	UserQuery query.UserQuery
 }
 
-type UserUsecase struct {
+type Usecase struct {
 	c c
 	q q
 }
 
-func NewUserUsecase(db *gorm.DB) UserUsecase {
-	return UserUsecase{
+func NewUserUsecase(db *gorm.DB) Usecase {
+	return Usecase{
 		q: q{
 			infra.NewUserQueryImpl(db),
 		},

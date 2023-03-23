@@ -6,17 +6,17 @@ import (
 	"github.com/api-sample/app/pkg/result"
 )
 
-func (u UserUsecase) FindById(in FindByIdInput) (FindByIdOutput, result.Responce) {
-	user := u.q.UserQuery.FindById(in.ID)
+func (u Usecase) FindByID(in FindByIDInput) (FindByIDOutput, result.Response) {
+	user := u.q.UserQuery.FindByID(in.ID)
 
 	if !user.Exists() {
-		return FindByIdOutput{}, result.NewResponce(
+		return FindByIDOutput{}, result.NewResponce(
 			http.StatusNotFound,
 			"ユーザーが見つかりませんでした",
 		)
 	}
 
-	return FindByIdOutput{
+	return FindByIDOutput{
 		ID:       user.ID,
 		Name:     user.Name,
 		BirthDay: user.BirthDay,

@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/api-sample/app/pkg/db"
-	"github.com/api-sample/app/pkg/entity"
+	"github.com/api-sample/app/domain/entity"
+	"github.com/api-sample/app/infra"
 )
 
 func DefaultSeed(*sql.DB) {
@@ -27,7 +27,7 @@ func DefaultSeed(*sql.DB) {
 			Valid: false,
 		},
 	}
-	if err := db.DB.Create(&u).Error; err != nil {
+	if err := infra.DB.Create(&u).Error; err != nil {
 		panic(err)
 	}
 
@@ -39,7 +39,7 @@ func DefaultSeed(*sql.DB) {
 		CreatedAt: sql.NullTime{},
 		UpdatedAt: sql.NullTime{},
 	}
-	if err := db.DB.Create(&u).Error; err != nil {
+	if err := infra.DB.Create(&u).Error; err != nil {
 		panic(err)
 	}
 }

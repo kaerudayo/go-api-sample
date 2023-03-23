@@ -8,7 +8,7 @@ import (
 
 func NewRouter() *echo.Echo {
 	e := echo.New()
-	e.Use(logger.LoggerMiddleware())
+	e.Use(logger.Middleware())
 	e.Use(middleware.Recover())
 
 	NewUserRoute(e)

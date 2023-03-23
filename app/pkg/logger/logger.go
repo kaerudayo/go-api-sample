@@ -22,7 +22,7 @@ func Init() *zap.Logger {
 	return logger
 }
 
-func LoggerMiddleware() echo.MiddlewareFunc {
+func Middleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			now := time.Now()
@@ -84,9 +84,9 @@ func getLogField(c echo.Context) []zapcore.Field {
 	if isIgnoreUserAgent(req.UserAgent()) {
 		return nil
 	}
-	var userId string
+	var userID interface{}
 	if user := c.Get("userID"); user != nil {
-		userId = user.(string)
+		userID = user
 	}
 
 	return []zapcore.Field{
@@ -97,7 +97,7 @@ func getLogField(c echo.Context) []zapcore.Field {
 		zap.String("host", req.Host),
 		zap.String("request", fmt.Sprintf("%s %s", req.Method, req.RequestURI)),
 		zap.String("user_agent", req.UserAgent()),
-		zap.String("user_id", userId),
+		zap.Any("user_id", userID),
 		zap.Int("status", res.Status),
 		zap.Int64("size", res.Size),
 	}
