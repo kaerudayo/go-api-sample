@@ -2,25 +2,25 @@ package result
 
 import "net/http"
 
-type Responce struct {
+type Response struct {
 	Code int
 	Msg  string
 }
 
-func NewResponce(code int, msg string) Responce {
-	return Responce{
+func NewResponce(code int, msg string) Response {
+	return Response{
 		Code: code,
 		Msg:  msg,
 	}
 }
 
-func Success(msg string) Responce {
-	return Responce{
+func Success(msg string) Response {
+	return Response{
 		Code: http.StatusOK,
 		Msg:  msg,
 	}
 }
 
-func (r *Responce) IsErr() bool {
+func (r *Response) IsErr() bool {
 	return r.Code >= 400 || r.Code == 0
 }
