@@ -12,9 +12,8 @@ func FindByID(c echo.Context) error {
 	}
 
 	input := body.toInput()
-	u := user.NewUserUsecase(infra.DB)
-
-	output, res := u.FindByID(input)
+	u := user.NewUsecase(infra.DB)
+	output, res := u.FindByID(input, c)
 	if res.IsErr() {
 		return c.JSON(res.Code, res.Msg)
 	}
