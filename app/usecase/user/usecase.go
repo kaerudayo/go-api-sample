@@ -6,8 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type c struct {
-}
+type c struct{}
 
 type q struct {
 	UserQuery query.UserQuery
