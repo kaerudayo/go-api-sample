@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/api-sample/app/domain/model"
+	"github.com/api-sample/app/pkg/db"
 )
 
 type User struct {
@@ -25,5 +26,17 @@ func (e User) Model() model.User {
 		BirthDay:  e.BirthDay.Time,
 		CreatedAt: e.CreatedAt.Time,
 		UpdatedAt: e.CreatedAt.Time,
+	}
+}
+
+func NewUserEntity(m model.User) User {
+	return User{
+		ID:        m.ID,
+		Name:      m.Name,
+		Email:     m.Email,
+		Password:  m.Password,
+		BirthDay:  db.NewSQLNullTime(m.BirthDay),
+		CreatedAt: db.NewSQLNullTime(m.CreatedAt),
+		UpdatedAt: db.NewSQLNullTime(m.CreatedAt),
 	}
 }
