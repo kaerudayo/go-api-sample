@@ -1,6 +1,7 @@
-package infra
+package reader
 
 import (
+	"github.com/api-sample/app/domain/entity"
 	"github.com/api-sample/app/domain/model"
 	"github.com/api-sample/app/domain/repository/query"
 	"gorm.io/gorm"
@@ -15,8 +16,10 @@ func NewUserQueryImpl(db *gorm.DB) query.UserQuery {
 	return &userRepo
 }
 
-func (impl UserQueryImpl) FindByID(id string) model.User {
-	var user model.User
-	impl.db.Where("id = ?", id).Find(&user)
-	return user
+func (impl UserQueryImpl) FindByID(id string) (model.User, error) {
+	var user entity.User
+	if err := impl.db.Where("id = ?", id).Find(&user).Error; err != nil {
+		return model.User{}, err
+	}
+	return user.Model(), nil
 }
