@@ -1,4 +1,4 @@
 .mysql/
 .env
 redis/data/
-app/tmp
+app/.tmp
