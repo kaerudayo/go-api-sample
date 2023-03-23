@@ -1,12 +1,16 @@
 package user
 
 import (
+	"github.com/api-sample/app/domain/repository/command"
 	"github.com/api-sample/app/domain/repository/query"
-	infra "github.com/api-sample/app/infra/query"
+	"github.com/api-sample/app/infra/reader"
+	"github.com/api-sample/app/infra/writer"
 	"gorm.io/gorm"
 )
 
-type c struct{}
+type c struct {
+	UserCommand command.UserCommand
+}
 
 type q struct {
 	UserQuery query.UserQuery
@@ -17,10 +21,13 @@ type Usecase struct {
 	q q
 }
 
-func NewUserUsecase(db *gorm.DB) Usecase {
+func NewUsecase(db *gorm.DB) Usecase {
 	return Usecase{
 		q: q{
-			infra.NewUserQueryImpl(db),
+			UserQuery: reader.NewUserQueryImpl(db),
+		},
+		c: c{
+			UserCommand: writer.NewUserCommandImpl(db),
 		},
 	}
 }
