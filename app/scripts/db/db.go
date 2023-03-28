@@ -31,7 +31,7 @@ func main() {
 }
 
 func createDatabase() {
-	infra.Init(false)
+	infra.MysqlInit(false)
 	err := infra.DB.Exec("CREATE SCHEMA IF NOT EXISTS " + databaseName).Error
 	if err != nil {
 		fmt.Printf("[createDatabase]... %s", err)
@@ -39,7 +39,7 @@ func createDatabase() {
 }
 
 func migrateDatabase() {
-	mySQLDB := infra.Init(true)
+	mySQLDB := infra.MysqlInit(true)
 
 	driver, err := mysql.WithInstance(mySQLDB, &mysql.Config{})
 	if err != nil {
@@ -63,7 +63,7 @@ func migrateDatabase() {
 }
 
 func dropDatabase() {
-	infra.Init(false)
+	infra.MysqlInit(false)
 	err := infra.DB.Exec("DROP SCHEMA IF EXISTS " + databaseName).Error
 	if err != nil {
 		fmt.Printf("[dropDatabase]... %s", err)
@@ -71,6 +71,6 @@ func dropDatabase() {
 }
 
 func seedDatabase() {
-	seedDB := infra.Init(true)
+	seedDB := infra.MysqlInit(true)
 	seed.DefaultSeed(seedDB)
 }

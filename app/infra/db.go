@@ -13,22 +13,22 @@ import (
 )
 
 var (
-	host      = os.Getenv("DB_HOST")
-	user      = os.Getenv("DB_USER")
-	pwd       = os.Getenv("DB_PWD")
-	database  = os.Getenv("DB_DATABASE")
-	port      = os.Getenv("DB_PORT")
-	dnsParams = "charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local&multiStatements=true"
-	DB        *gorm.DB
-	err       error
-	mySQLDB   *sql.DB
+	host     = os.Getenv("DB_HOST")
+	user     = os.Getenv("DB_USER")
+	pwd      = os.Getenv("DB_PWD")
+	database = os.Getenv("DB_DATABASE")
+	port     = os.Getenv("DB_PORT")
+	params   = "parseTime=true"
+	DB       *gorm.DB
+	err      error
+	mySQLDB  *sql.DB
 )
 
-func Init(includeDatabaseName bool) *sql.DB {
-	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, dnsParams)
+func MysqlInit(includeDatabaseName bool) *sql.DB {
+	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, params)
 
 	if !includeDatabaseName {
-		dsn = fmt.Sprintf("%s:%s@(%s:%s)/?%s", user, pwd, host, port, dnsParams)
+		dsn = fmt.Sprintf("%s:%s@(%s:%s)/?%s", user, pwd, host, port, params)
 	}
 
 	mySQLDB, err = sql.Open("mysql", dsn)
@@ -49,7 +49,7 @@ func Init(includeDatabaseName bool) *sql.DB {
 	if err != nil {
 		fmt.Printf("db open error: dsn: %s, error: %s", dsn, err.Error())
 		time.Sleep(5 * time.Second)
-		Init(includeDatabaseName)
+		MysqlInit(includeDatabaseName)
 		return mySQLDB
 	}
 

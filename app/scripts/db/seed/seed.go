@@ -14,10 +14,6 @@ func DefaultSeed(*sql.DB) {
 		Name:     "user_1",
 		Email:    "user_1@example.com",
 		Password: "user_1_pass",
-		BirthDay: sql.NullTime{
-			Time:  time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
-			Valid: true,
-		},
 		CreatedAt: sql.NullTime{
 			Time:  time.Time{},
 			Valid: false,

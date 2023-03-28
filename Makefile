@@ -24,6 +24,15 @@ lint:
 lint-fix:
 	docker run -it --rm -v $(PWD)/app:/app -w /app golangci/golangci-lint:v1.52.0 golangci-lint run --fix
 
+test-parallel: # make test-parallel OPTION="./package/... -run TestFuncName"
+	docker exec -i api-server /bin/sh -c "GO_ENV=test go test -v -tags=parallel ${OPTION}"
+
+test-serial: # make test-parallel OPTION="./package/... -run TestFuncName"
+	docker exec -i api-server /bin/sh -c "GO_ENV=test go test -v -tags=serial ${OPTION}"
+
+test-api: # make test-api OPTION="./controllers/... -run TestFuncName"
+	docker exec -i api-server /bin/sh -c "GO_ENV=test go test -v -tags=api ${OPTION}"
+
 .PHONY: shell/*
 shell/api:
 	docker exec -it api-server /bin/bash

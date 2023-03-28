@@ -3,8 +3,8 @@ package result
 import "net/http"
 
 type Response struct {
-	Code int
-	Msg  string
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 func NewResponce(code int, msg string) Response {
