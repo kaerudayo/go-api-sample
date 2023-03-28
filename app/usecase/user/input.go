@@ -1,7 +1,12 @@
 package user
 
+type LoginInput struct {
+	Email    string
+	Password string
+}
+
 type SignUpInput struct {
-	ID       string
+	Email    string
 	Password string
 }
 

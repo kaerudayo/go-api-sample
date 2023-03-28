@@ -24,7 +24,7 @@ var (
 	mySQLDB   *sql.DB
 )
 
-func Init(includeDatabaseName bool) *sql.DB {
+func MysqlInit(includeDatabaseName bool) *sql.DB {
 	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, dnsParams)
 
 	if !includeDatabaseName {
@@ -49,7 +49,7 @@ func Init(includeDatabaseName bool) *sql.DB {
 	if err != nil {
 		fmt.Printf("db open error: dsn: %s, error: %s", dsn, err.Error())
 		time.Sleep(5 * time.Second)
-		Init(includeDatabaseName)
+		MysqlInit(includeDatabaseName)
 		return mySQLDB
 	}
 

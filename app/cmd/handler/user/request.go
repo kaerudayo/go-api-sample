@@ -2,14 +2,26 @@ package user
 
 import "github.com/api-sample/app/usecase/user"
 
+type loginReq struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func (r loginReq) toInput() user.LoginInput {
+	return user.LoginInput{
+		Email:    r.Email,
+		Password: r.Password,
+	}
+}
+
 type signUpReq struct {
-	ID       string `json:"id"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 func (r signUpReq) toInput() user.SignUpInput {
 	return user.SignUpInput{
-		ID:       r.ID,
+		Email:    r.Email,
 		Password: r.Password,
 	}
 }
