@@ -3,20 +3,26 @@ package user
 import (
 	"net/http"
 
+	"github.com/api-sample/app/pkg/logger"
 	"github.com/api-sample/app/pkg/result"
+	"github.com/labstack/echo/v4"
 )
 
-func (u UserUsecase) FindById(in FindByIdInput) (FindByIdOutput, result.Responce) {
-	user := u.q.UserQuery.FindById(in.ID)
+func (u Usecase) FindByID(in FindByIDInput, c echo.Context) (FindByIDOutput, result.Response) {
+	user, err := u.q.UserQuery.FindByID(in.ID)
+	if err != nil {
+		logger.Error(err.Error(), c)
+		return FindByIDOutput{}, result.NewInternalServerError("サーバーエラーが発生しました")
+	}
 
 	if !user.Exists() {
-		return FindByIdOutput{}, result.NewResponce(
+		return FindByIDOutput{}, result.NewResponce(
 			http.StatusNotFound,
 			"ユーザーが見つかりませんでした",
 		)
 	}
 
-	return FindByIdOutput{
+	return FindByIDOutput{
 		ID:       user.ID,
 		Name:     user.Name,
 		BirthDay: user.BirthDay,

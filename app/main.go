@@ -18,7 +18,9 @@ func main() {
 	// routerの初期化
 	e := router.NewRouter()
 	// dbの初期化
-	infra.Init(true)
+	infra.MysqlInit(true)
+	// redisの初期化
+	infra.CashInit()
 	// serverの起動
 	e.Logger.Fatal(e.Start(":" + consts.APIPort))
 }

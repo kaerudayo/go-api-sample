@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/api-sample/app/pkg/db"
+	"github.com/api-sample/app/infra"
 	"github.com/api-sample/app/scripts/db/seed"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/mysql"
@@ -31,15 +31,15 @@ func main() {
 }
 
 func createDatabase() {
-	db.Init(false)
-	err := db.DB.Exec("CREATE SCHEMA IF NOT EXISTS " + databaseName).Error
+	infra.MysqlInit(false)
+	err := infra.DB.Exec("CREATE SCHEMA IF NOT EXISTS " + databaseName).Error
 	if err != nil {
 		fmt.Printf("[createDatabase]... %s", err)
 	}
 }
 
 func migrateDatabase() {
-	mySQLDB := db.Init(true)
+	mySQLDB := infra.MysqlInit(true)
 
 	driver, err := mysql.WithInstance(mySQLDB, &mysql.Config{})
 	if err != nil {
@@ -63,14 +63,14 @@ func migrateDatabase() {
 }
 
 func dropDatabase() {
-	db.Init(false)
-	err := db.DB.Exec("DROP SCHEMA IF EXISTS " + databaseName).Error
+	infra.MysqlInit(false)
+	err := infra.DB.Exec("DROP SCHEMA IF EXISTS " + databaseName).Error
 	if err != nil {
 		fmt.Printf("[dropDatabase]... %s", err)
 	}
 }
 
 func seedDatabase() {
-	seedDB := db.Init(true)
+	seedDB := infra.MysqlInit(true)
 	seed.DefaultSeed(seedDB)
 }

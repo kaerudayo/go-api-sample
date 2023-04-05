@@ -1,10 +1,15 @@
 package user
 
-type SignUpInput struct {
-	ID       string
+type LoginInput struct {
+	Email    string
 	Password string
 }
 
-type FindByIdInput struct {
+type SignUpInput struct {
+	Email    string
+	Password string
+}
+
+type FindByIDInput struct {
 	ID string
 }

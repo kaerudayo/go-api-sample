@@ -6,15 +6,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func FindById(c echo.Context) error {
-	body := findByIdReq{
+func FindByID(c echo.Context) error {
+	body := findByIDReq{
 		ID: c.Param("id"),
 	}
 
 	input := body.toInput()
-	u := user.NewUserUsecase(infra.DB)
-
-	output, res := u.FindById(input)
+	u := user.NewUsecase(infra.DB)
+	output, res := u.FindByID(input, c)
 	if res.IsErr() {
 		return c.JSON(res.Code, res.Msg)
 	}

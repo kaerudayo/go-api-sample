@@ -12,17 +12,19 @@ import (
 	gormLogger "gorm.io/gorm/logger"
 )
 
-var host = os.Getenv("DB_HOST")
-var user = os.Getenv("DB_USER")
-var pwd = os.Getenv("DB_PWD")
-var database = os.Getenv("DB_DATABASE")
-var port = os.Getenv("DB_PORT")
-var dnsParams = "charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local&multiStatements=true"
-var DB *gorm.DB
-var err error
-var mySQLDB *sql.DB
+var (
+	host      = os.Getenv("DB_HOST")
+	user      = os.Getenv("DB_USER")
+	pwd       = os.Getenv("DB_PWD")
+	database  = os.Getenv("DB_DATABASE")
+	port      = os.Getenv("DB_PORT")
+	dnsParams = "charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local&multiStatements=true"
+	DB        *gorm.DB
+	err       error
+	mySQLDB   *sql.DB
+)
 
-func Init(includeDatabaseName bool) *sql.DB {
+func MysqlInit(includeDatabaseName bool) *sql.DB {
 	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, dnsParams)
 
 	if !includeDatabaseName {
@@ -47,7 +49,7 @@ func Init(includeDatabaseName bool) *sql.DB {
 	if err != nil {
 		fmt.Printf("db open error: dsn: %s, error: %s", dsn, err.Error())
 		time.Sleep(5 * time.Second)
-		Init(includeDatabaseName)
+		MysqlInit(includeDatabaseName)
 		return mySQLDB
 	}
 
