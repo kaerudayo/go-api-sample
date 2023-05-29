@@ -4,9 +4,6 @@ import (
 	"encoding/hex"
 	"time"
 
-	"encoding/hex"
-	"time"
-
 	"golang.org/x/crypto/scrypt"
 )
 

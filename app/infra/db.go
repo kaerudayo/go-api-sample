@@ -25,10 +25,10 @@ var (
 )
 
 func MysqlInit(includeDatabaseName bool) *sql.DB {
-	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, dnsParams)
+	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, params)
 
 	if !includeDatabaseName {
-		dsn = fmt.Sprintf("%s:%s@(%s:%s)/?%s", user, pwd, host, port, dnsParams)
+		dsn = fmt.Sprintf("%s:%s@(%s:%s)/?%s", user, pwd, host, port, params)
 	}
 
 	mySQLDB, err = sql.Open("mysql", dsn)
