@@ -11,12 +11,11 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
-	m "github.com/labstack/echo/v4/middleware"
 )
 
 var (
 	jwtSecret = os.Getenv("JWT_SECRET")
-	jwtExpire = time.Minute * time.Duration(30)
+	jwtExpire = time.Hour * time.Duration(8)
 )
 
 type TokenCache struct {
@@ -24,34 +23,6 @@ type TokenCache struct {
 	RecordID string `json:"record_id"`
 	Iat      int64  `json:"iat"`
 	Exp      int64  `json:"exp"`
-}
-
-// jwt tokenの検証
-func ValidateToken() echo.MiddlewareFunc {
-	return m.JWTWithConfig(m.JWTConfig{
-		SigningKey: jwtSecret,
-		ContextKey: "rawToken",
-		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
-			keyFunc := func(t *jwt.Token) (interface{}, error) {
-				if t.Method.Alg() != "HS256" {
-					return nil, fmt.Errorf("unexpected jwt signing method=%v", t.Header["alg"])
-				}
-				return jwtSecret, nil
-			}
-
-			token, err := jwt.Parse(auth, keyFunc)
-			if err.Error() != "Token used before issued" {
-				if err != nil {
-					return nil, err
-				}
-				if !token.Valid {
-					return nil, errors.New("invalid token")
-				}
-			}
-
-			return token, nil
-		},
-	})
 }
 
 // contextからjwt tokenを取得
@@ -73,14 +44,14 @@ func GetToken(c echo.Context) (TokenCache, error) {
 		}
 		return data, nil
 	}
-
 	return TokenCache{}, errors.New("value not found")
 }
 
 func CreateAndSetToken(id string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
-	iat := time.Now()
-	exp := iat.Add(jwtExpire).Unix()
+	now := time.Now()
+	iat := now.Unix()
+	exp := now.Add(jwtExpire).Unix()
 	jwtID := GenID()
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -97,7 +68,7 @@ func CreateAndSetToken(id string) (string, error) {
 	data, err := json.Marshal(TokenCache{
 		JwtID:    jwtID,
 		RecordID: id,
-		Iat:      iat.Unix(),
+		Iat:      iat,
 		Exp:      exp,
 	})
 	if err != nil {
