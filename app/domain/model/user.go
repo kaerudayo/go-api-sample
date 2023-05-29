@@ -1,18 +1,18 @@
 package model
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
 	"encoding/hex"
 	"time"
+
+	"golang.org/x/crypto/scrypt"
 )
 
 type User struct {
-	ID        string
-	Name      string
-	Email     string
-	Password  string
-	BirthDay  time.Time
+	ID       string
+	Name     string
+	Email    string
+	Password string
+
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -22,10 +22,8 @@ func (m *User) Exists() bool {
 }
 
 func HashPass(email, pass string) string {
-	r := sha256.Sum256([]byte(email))
-	mac := hmac.New(sha256.New, r[:])
-	mac.Write([]byte(pass))
-	return hex.EncodeToString(mac.Sum(nil))
+	converted, _ := scrypt.Key([]byte(pass), []byte(email), 16384, 8, 1, 16)
+	return hex.EncodeToString(converted[:])
 }
 
 func (m *User) ValidPass(pass string) bool {

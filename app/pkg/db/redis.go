@@ -2,43 +2,56 @@ package db
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/api-sample/app/infra"
-	"github.com/api-sample/app/pkg/logger"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/labstack/echo/v4"
 )
 
 var (
 	jwtSecret = os.Getenv("JWT_SECRET")
-	jwtExpire = time.Minute * time.Duration(15)
+	jwtExpire = time.Hour * time.Duration(8)
 )
 
 type TokenCache struct {
 	JwtID    string `json:"jwt_id"`
-	ID       string `json:"id"`
 	RecordID string `json:"record_id"`
 	Iat      int64  `json:"iat"`
 	Exp      int64  `json:"exp"`
 }
 
-func DBKeyGen(tableName string, args []string) string {
-	if args[0] == "all" {
-		return fmt.Sprintf("%s/%s/*", infra.CacheDB, tableName)
+// contextからjwt tokenを取得
+func GetToken(c echo.Context) (TokenCache, error) {
+	rawToken := c.Get("rawToken").(*jwt.Token)
+	claims := rawToken.Claims.(jwt.MapClaims)
+	if _, ok := claims["id"]; !ok {
+		return TokenCache{}, errors.New("claims is empty")
 	}
-	res, err := json.Marshal(args)
-	if err != nil {
-		logger.SugerError(err.Error())
+
+	jwtID := claims["id"]
+	key := fmt.Sprintf("%s/%s", jwtSecret, jwtID.(string))
+	val, err := infra.RedisDB.Get(infra.Ctx, key).Result()
+	if val != "" && err != redis.Nil {
+		data := TokenCache{}
+		err := json.Unmarshal([]byte(val), &data)
+		if err != nil {
+			return TokenCache{}, err
+		}
+		return data, nil
 	}
-	return fmt.Sprintf("%s/%s/%s", infra.CacheDB, tableName, string(res))
+	return TokenCache{}, errors.New("value not found")
 }
 
 func CreateAndSetToken(id string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
-	iat := time.Now()
-	exp := iat.Add(jwtExpire).Unix()
+	now := time.Now()
+	iat := now.Unix()
+	exp := now.Add(jwtExpire).Unix()
 	jwtID := GenID()
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -55,6 +68,8 @@ func CreateAndSetToken(id string) (string, error) {
 	data, err := json.Marshal(TokenCache{
 		JwtID:    jwtID,
 		RecordID: id,
+		Iat:      iat,
+		Exp:      exp,
 	})
 	if err != nil {
 		return "", err

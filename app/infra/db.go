@@ -13,22 +13,22 @@ import (
 )
 
 var (
-	host      = os.Getenv("DB_HOST")
-	user      = os.Getenv("DB_USER")
-	pwd       = os.Getenv("DB_PWD")
-	database  = os.Getenv("DB_DATABASE")
-	port      = os.Getenv("DB_PORT")
-	dnsParams = "charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local&multiStatements=true"
-	DB        *gorm.DB
-	err       error
-	mySQLDB   *sql.DB
+	host     = os.Getenv("DB_HOST")
+	user     = os.Getenv("DB_USER")
+	pwd      = os.Getenv("DB_PWD")
+	database = os.Getenv("DB_DATABASE")
+	port     = os.Getenv("DB_PORT")
+	params   = "parseTime=true"
+	DB       *gorm.DB
+	err      error
+	mySQLDB  *sql.DB
 )
 
 func MysqlInit(includeDatabaseName bool) *sql.DB {
-	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, dnsParams)
+	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?%s", user, pwd, host, port, database, params)
 
 	if !includeDatabaseName {
-		dsn = fmt.Sprintf("%s:%s@(%s:%s)/?%s", user, pwd, host, port, dnsParams)
+		dsn = fmt.Sprintf("%s:%s@(%s:%s)/?%s", user, pwd, host, port, params)
 	}
 
 	mySQLDB, err = sql.Open("mysql", dsn)

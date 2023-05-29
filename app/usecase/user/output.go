@@ -1,14 +1,11 @@
 package user
 
-import "time"
-
 type FindByIDOutput struct {
-	ID       string    `json:"id"`
-	Name     string    `json:"name"`
-	BirthDay time.Time `json:"birthDay"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type LoginOutput struct {
-	ID          string
-	AccessToken string
+	ID          string `json:"id"`
+	AccessToken string `json:"access_token"`
 }

@@ -23,8 +23,7 @@ func (u Usecase) FindByID(in FindByIDInput, c echo.Context) (FindByIDOutput, res
 	}
 
 	return FindByIDOutput{
-		ID:       user.ID,
-		Name:     user.Name,
-		BirthDay: user.BirthDay,
+		ID:   user.ID,
+		Name: user.Name,
 	}, result.Success("success")
 }

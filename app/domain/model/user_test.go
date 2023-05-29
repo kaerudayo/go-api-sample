@@ -3,18 +3,67 @@
 
 package model_test
 
-func TestUser_HasPass(t *testing.T) {
+import (
+	"testing"
+
+	"github.com/api-sample/app/domain/model"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestUser_HashPass(t *testing.T) {
 	cases := map[string]struct {
-		given interface{}
-		want  interface{}
-	}{}
+		email string
+		pass  string
+		want  string
+	}{
+		"success": {
+			email: "sample@example.com",
+			pass:  "hoge",
+			want:  "dc02fb7f8721aae5ffb1a6459605e815",
+		},
+	}
 
 	for name, c := range cases {
 		c := c
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			got := 1
+			got := model.HashPass(c.email, c.pass)
 			assert.Equal(t, c.want, got)
 		})
+	}
+}
+
+// TestUser_HashPassの内容でtest
+func TestUser_ValidPass(t *testing.T) {
+	cases := map[string]struct {
+		m     model.User
+		email string
+		pass  string
+		want  bool
+	}{
+		"success": {
+			m: model.User{
+				Email:    "sample@example.com",
+				Password: "dc02fb7f8721aae5ffb1a6459605e815",
+			},
+			pass: "hoge",
+			want: true,
+		},
+		"failed_model": {
+			m: model.User{
+				Email:    "sample@example.com",
+				Password: "aaaaaaaaaaaaa",
+			},
+			pass: "hoge",
+			want: false,
+		},
+		"failed_input": {
+			m: model.User{
+				Email:    "sample@example.com",
+				Password: "dc02fb7f8721aae5ffb1a6459605e815",
+			},
+			pass: "fuga",
+			want: false,
+		},
 	}
 }
