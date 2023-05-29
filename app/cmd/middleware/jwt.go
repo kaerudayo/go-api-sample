@@ -15,6 +15,7 @@ var (
 )
 
 // jwt tokenの検証
+// https://jwt.io/
 func ValidateToken() echo.MiddlewareFunc {
 	return m.JWTWithConfig(m.JWTConfig{
 		SigningKey: jwtSecret,
@@ -28,7 +29,6 @@ func ValidateToken() echo.MiddlewareFunc {
 			}
 
 			token, err := jwt.Parse(auth, keyFunc)
-
 			if err != nil {
 				return nil, err
 			}
