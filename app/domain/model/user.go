@@ -4,14 +4,18 @@ import (
 	"encoding/hex"
 	"time"
 
+	"encoding/hex"
+	"time"
+
 	"golang.org/x/crypto/scrypt"
 )
 
 type User struct {
-	ID        string
-	Name      string
-	Email     string
-	Password  string
+	ID       string
+	Name     string
+	Email    string
+	Password string
+
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/api-sample/app/domain/model"
 	commad "github.com/api-sample/app/domain/repository/command"
 	"github.com/api-sample/app/pkg/db"
+
 	"gorm.io/gorm"
 )
 
@@ -19,6 +20,7 @@ func NewUserCommandImpl(db *gorm.DB) commad.UserCommand {
 
 func (impl UserCommandImpl) Create(m *model.User) error {
 	m.ID = db.GenID()
+
 	e := entity.NewUserEntity(*m)
 	if err := impl.db.Create(&e).Error; err != nil {
 		return err

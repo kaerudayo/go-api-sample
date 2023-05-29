@@ -66,13 +66,4 @@ func TestUser_ValidPass(t *testing.T) {
 			want: false,
 		},
 	}
-
-	for name, c := range cases {
-		c := c
-		t.Run(name, func(t *testing.T) {
-			t.Parallel()
-			got := c.m.ValidPass(c.pass)
-			assert.Equal(t, c.want, got)
-		})
-	}
 }

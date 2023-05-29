@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/api-sample/app/domain/model"
+
 	"github.com/api-sample/app/pkg/db"
 	"github.com/api-sample/app/pkg/logger"
 	"github.com/api-sample/app/pkg/result"
