@@ -16,13 +16,13 @@ func (u Usecase) SignUp(in SignUpInput, c echo.Context) result.Response {
 	user, err := u.q.UserQuery.FindByEmail(in.Email)
 	if err != nil {
 		logger.Error(err.Error(), c)
-		return result.NewInternalServerError("サーバーエラーが発生しました")
+		return result.NewInternalServerError("Internal Server Error")
 	}
 
 	if user.Exists() {
-		return result.NewResponce(
+		return result.NewResponse(
 			http.StatusFound,
-			"このemailのユーザーはすでに登録されています",
+			"Users of this email are already registered",
 		)
 	}
 
@@ -32,7 +32,7 @@ func (u Usecase) SignUp(in SignUpInput, c echo.Context) result.Response {
 	if err := u.c.UserCommand.Create(&user); err != nil {
 		logger.Error(err.Error(), c)
 
-		return result.NewInternalServerError("サーバーエラーが発生しました")
+		return result.NewInternalServerError("Internal Server Error")
 	}
 
 	return result.Success("")
@@ -42,20 +42,20 @@ func (u Usecase) Login(in LoginInput, c echo.Context) (LoginOutput, result.Respo
 	user, err := u.q.UserQuery.FindByEmail(in.Email)
 	if err != nil {
 		logger.Error(err.Error(), c)
-		return LoginOutput{}, result.NewInternalServerError("サーバーエラーが発生しました")
+		return LoginOutput{}, result.NewInternalServerError("Internal Server Error")
 	}
 
 	if !user.Exists() {
-		return LoginOutput{}, result.NewResponce(
+		return LoginOutput{}, result.NewResponse(
 			http.StatusNotFound,
-			"emailまたはpasswordが間違っています",
+			"email or password is incorrect",
 		)
 	}
 
 	if !user.ValidPass(in.Password) {
-		return LoginOutput{}, result.NewResponce(
+		return LoginOutput{}, result.NewResponse(
 			http.StatusUnauthorized,
-			"emailまたはpasswordが間違っています",
+			"email or password is incorrect",
 		)
 	}
 
@@ -63,11 +63,11 @@ func (u Usecase) Login(in LoginInput, c echo.Context) (LoginOutput, result.Respo
 	if err != nil {
 		logger.Error(err.Error(), c)
 		return LoginOutput{},
-			result.NewInternalServerError("サーバーエラーが発生しました")
+			result.NewInternalServerError("Internal Server Error")
 	}
 
 	return LoginOutput{
 		ID:          user.ID,
 		AccessToken: fmt.Sprintf("Bearer %s", token),
-	}, result.Success("success")
+	}, result.Success("")
 }

@@ -33,7 +33,6 @@ func TestUser_HashPass(t *testing.T) {
 	}
 }
 
-// TestUser_HashPassの内容でtest
 func TestUser_ValidPass(t *testing.T) {
 	cases := map[string]struct {
 		m     model.User
@@ -65,5 +64,14 @@ func TestUser_ValidPass(t *testing.T) {
 			pass: "fuga",
 			want: false,
 		},
+	}
+
+	for name, c := range cases {
+		c := c
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			got := c.m.ValidPass(c.pass)
+			assert.Equal(t, c.want, got)
+		})
 	}
 }

@@ -9,21 +9,21 @@ import (
 )
 
 func (u Usecase) FindByID(in FindByIDInput, c echo.Context) (FindByIDOutput, result.Response) {
-	user, err := u.q.UserQuery.FindByID(in.ID)
+	user, err := u.q.UserQuery.FindByID(in.UserID)
 	if err != nil {
 		logger.Error(err.Error(), c)
-		return FindByIDOutput{}, result.NewInternalServerError("サーバーエラーが発生しました")
+		return FindByIDOutput{}, result.NewInternalServerError("Internal Server Error")
 	}
 
 	if !user.Exists() {
-		return FindByIDOutput{}, result.NewResponce(
+		return FindByIDOutput{}, result.NewResponse(
 			http.StatusNotFound,
-			"ユーザーが見つかりませんでした",
+			"User not found",
 		)
 	}
 
 	return FindByIDOutput{
 		ID:   user.ID,
 		Name: user.Name,
-	}, result.Success("success")
+	}, result.Success("")
 }

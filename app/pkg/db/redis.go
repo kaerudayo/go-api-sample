@@ -25,7 +25,7 @@ type TokenCache struct {
 	Exp      int64  `json:"exp"`
 }
 
-// contextからjwt tokenを取得
+// get jwt token from context
 func GetToken(c echo.Context) (TokenCache, error) {
 	rawToken := c.Get("rawToken").(*jwt.Token)
 	claims := rawToken.Claims.(jwt.MapClaims)
