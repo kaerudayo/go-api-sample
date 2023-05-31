@@ -2,6 +2,7 @@ package logger
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -31,11 +32,11 @@ func Middleware() echo.MiddlewareFunc {
 				c.Error(err)
 			}
 			fields := getLogField(c)
-			// fieldが空の場合はskip
+			// skip if field is empty
 			if len(fields) == 0 {
 				return nil
 			}
-			// access logの時はレイテンシーも出力
+			// output latency when access logging
 			fields = append(fields, zap.Int64("latency", time.Since(now).Nanoseconds()))
 			logger.Info("", fields...)
 			return nil
@@ -45,7 +46,7 @@ func Middleware() echo.MiddlewareFunc {
 
 func Info(msg string, c echo.Context) {
 	if c == nil {
-		SugerInfo(msg)
+		log.Println(msg)
 		return
 	}
 	logger.WithOptions(zap.AddCallerSkip(1)).Info(msg, getLogField(c)...)
@@ -53,7 +54,7 @@ func Info(msg string, c echo.Context) {
 
 func Error(msg string, c echo.Context) {
 	if c == nil {
-		SugerError(msg)
+		log.Println(msg)
 		return
 	}
 	logger.WithOptions(zap.AddCallerSkip(1)).Error(msg, getLogField(c)...)
@@ -63,24 +64,10 @@ func Fatal(msg string) {
 	logger.WithOptions(zap.AddCallerSkip(1)).Fatal(msg)
 }
 
-func SugerInfo(msg string) {
-	logger.WithOptions(zap.AddCallerSkip(1)).Sugar().Infow(
-		msg,
-		"time", time.Now().String(),
-	)
-}
-
-func SugerError(msg string) {
-	logger.WithOptions(zap.AddCallerSkip(1)).Sugar().Errorw(
-		msg,
-		"time", time.Now().String(),
-	)
-}
-
 func getLogField(c echo.Context) []zapcore.Field {
 	req := c.Request()
 	res := c.Response()
-	// NOTE helthCheck等はアクセスログを吐かないように
+	// helthCheck, etc. do not spit out access logs.
 	if isIgnoreUserAgent(req.UserAgent()) {
 		return nil
 	}

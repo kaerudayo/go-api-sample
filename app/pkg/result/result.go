@@ -7,7 +7,7 @@ type Response struct {
 	Msg  string `json:"msg"`
 }
 
-func NewResponce(code int, msg string) Response {
+func NewResponse(code int, msg string) Response {
 	return Response{
 		Code: code,
 		Msg:  msg,

@@ -18,6 +18,12 @@ db/reset: db/drop db/create db/migrate db/seed
 db/drop db/create db/migrate db/seed:
 	docker exec -it api-server /bin/sh -c "go run scripts/db/db.go ${@F}"
 
+tidy:
+	docker exec -it api-server /bin/sh -c "go mod tidy"
+
+mockgen:
+	docker exec -it api-server /bin/sh -c "mockgen -source=./domain/repository/query/${SOURCE} -destination=./infra/reader/mock/${SOURCE}"
+
 .PHONY: lint test
 lint:
 	docker run -it --rm -v $(PWD)/app:/app -w /app golangci/golangci-lint:v1.52.0 golangci-lint run

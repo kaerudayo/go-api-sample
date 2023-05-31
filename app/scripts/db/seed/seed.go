@@ -2,9 +2,9 @@ package seed
 
 import (
 	"database/sql"
-	"time"
 
 	"github.com/api-sample/app/domain/entity"
+	"github.com/api-sample/app/domain/model"
 	"github.com/api-sample/app/infra"
 )
 
@@ -13,16 +13,9 @@ func DefaultSeed(*sql.DB) {
 		ID:       "user_1",
 		Name:     "user_1",
 		Email:    "user_1@example.com",
-		Password: "user_1_pass",
-		CreatedAt: sql.NullTime{
-			Time:  time.Time{},
-			Valid: false,
-		},
-		UpdatedAt: sql.NullTime{
-			Time:  time.Time{},
-			Valid: false,
-		},
+		Password: "password",
 	}
+	u.Password = model.HashPass(u.Email, u.Password)
 	if err := infra.DB.Create(&u).Error; err != nil {
 		panic(err)
 	}
@@ -31,10 +24,11 @@ func DefaultSeed(*sql.DB) {
 		ID:        "user_2",
 		Name:      "user_2",
 		Email:     "user_2@example.com",
-		Password:  "user_2_pass",
+		Password:  "password",
 		CreatedAt: sql.NullTime{},
 		UpdatedAt: sql.NullTime{},
 	}
+	u.Password = model.HashPass(u.Email, u.Password)
 	if err := infra.DB.Create(&u).Error; err != nil {
 		panic(err)
 	}

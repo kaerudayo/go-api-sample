@@ -4,8 +4,10 @@ go 1.20
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/go-testfixtures/testfixtures/v3 v3.8.1
 	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
+	github.com/golang/mock v1.6.0
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/stretchr/testify v1.8.1

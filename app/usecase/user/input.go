@@ -11,5 +11,5 @@ type SignUpInput struct {
 }
 
 type FindByIDInput struct {
-	ID string
+	UserID string
 }

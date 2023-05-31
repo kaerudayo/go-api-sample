@@ -32,6 +32,6 @@ type findByIDReq struct {
 
 func (r findByIDReq) toInput() user.FindByIDInput {
 	return user.FindByIDInput{
-		ID: r.ID,
+		UserID: r.ID,
 	}
 }
