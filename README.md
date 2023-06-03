@@ -1,1 +1,2 @@
 # go-api-sample
+sample
